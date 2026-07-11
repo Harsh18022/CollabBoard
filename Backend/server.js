@@ -7,21 +7,19 @@ const { Server } = require("socket.io");
 require("dotenv").config();
 
 const app = express();
-app.use(cors());
+
+// Single CORS config, restricted to production frontend
+app.use(cors({ origin: "https://collab-board-sigma.vercel.app" }));
 app.use(express.json());
 
-// Create HTTP server and wrap Express app
 const server = http.createServer(app);
 
-// Attach Socket.io to the server
 const io = new Server(server, {
-  cors: { origin: "*" },
+  cors: { origin: "https://collab-board-sigma.vercel.app" },
 });
 
-// Make io accessible in routes via req.app.get("io")
 app.set("io", io);
 
-// Socket connection handling
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
